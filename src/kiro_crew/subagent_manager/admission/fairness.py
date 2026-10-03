@@ -368,9 +368,7 @@ class _FairnessMixin(ManagerComponent):
         if not view.any_slot:
             return None
         for idx, params in enumerate(queue):
-            if self.entry_is_resident_resume(
-                params
-            ) and not self._manager._boundary_cancellation_pending(params):
+            if self.entry_is_resident_resume(params):
                 return idx
         roots_ok = view.root_slot
 
@@ -379,7 +377,6 @@ class _FairnessMixin(ManagerComponent):
             # (``_release_admitted_start_impl``) meters it, ahead of this pick.
             return (
                 not params.get("_startup_release")
-                and not self._manager._boundary_cancellation_pending(params)
                 and (
                     self.entry_is_child(params)
                     or (roots_ok and (root_held is None or not root_held(params)))
